@@ -1,6 +1,6 @@
 {
-  "name": "spriebsch/timestamp",
-  "description": "A timestamp with microsecond granularity.",
+  "name": "spriebsch/sqlite",
+  "description": "Lightweight Sqlite wrapper with lazy connection and schema creation.",
   "authors": [
     {
       "name": "Stefan Priebsch",
