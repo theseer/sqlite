@@ -60,7 +60,6 @@ final class SqliteConnection implements Connection
         if ($this->connection === null) {
             $this->connection = new SQLite3($this->database);
             $this->connection->enableExceptions(true);
-            $this->connection->exec('PRAGMA journal_mode=WAL');
         }
 
         return $this->connection;
