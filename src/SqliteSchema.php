@@ -30,63 +30,60 @@ abstract class SqliteSchema
 
     public function createIfNotExists(): void
     {
-        if ($this->schemaAlreadyExists($this->connection)) {
+        if ($this->databaseSchemaExists($this->connection)) {
             return;
         }
 
-        $database = $this->connection->database();
-
-        if ($this->databaseDirectoryDoesNotExist($database)) {
-            $this->createDatabaseDirectory($database);
-        }
-
-        $this->createSchema($this->connection);
+        $this->createDatabaseSchema($this->connection);
     }
 
-    private function schemaAlreadyExists(Connection $connection): bool
+    private function databaseSchemaExists(Connection $connection): bool
     {
-        if (!$this->databaseExists($connection->database())) {
+        if ($this->databaseDoesNotExist($connection)) {
             return false;
         }
 
         return $this->schemaExists($connection);
     }
 
-    private function databaseExists(string $database): bool
+    private function databaseDoesNotExist(Connection $connection): bool
     {
-        if ($this->isInMemoryDatabase($database)) {
-            return false;
+        if ($connection->isInMemoryDatabase()) {
+            return true;
         }
 
+        return $this->databaseExists($connection->database());
+    }
+
+    private function databaseExists(string $database): bool
+    {
         return is_file($database);
     }
 
-    private function databaseDirectoryDoesNotExist(string $database): bool
+    private function createDatabaseSchema(Connection $connection): void
     {
-        if ($this->isInMemoryDatabase($database)) {
-            return false;
+        if (!$connection->isInMemoryDatabase()) {
+            if ($this->databaseDirectoryDoesNotExist($connection->database())) {
+                $this->createDatabaseDirectory($connection->database());
+            }
         }
 
-        return !is_dir($this->databaseDirectory($database));
+        $this->createSchema($connection);
     }
 
     private function createDatabaseDirectory(string $database): void
     {
-        if ($this->isInMemoryDatabase($database)) {
-            return;
-        }
-
         mkdir($this->databaseDirectory($database), 0755, true);
+    }
+
+    private function databaseDirectoryDoesNotExist(string $database): bool
+    {
+        return !is_dir($this->databaseDirectory($database));
     }
 
     private function databaseDirectory($database): string
     {
         return dirname($database);
-    }
-
-    private function isInMemoryDatabase(string $database): bool
-    {
-        return $database === ':memory:';
     }
 
     abstract protected function schemaExists(Connection $connection): bool;

@@ -18,6 +18,8 @@ interface Connection
 {
     public function database(): string;
 
+    public function isInMemoryDatabase(): bool;
+
     public function prepare(string $statement): SQLite3Stmt;
 
     public function exec(string $statement): bool;

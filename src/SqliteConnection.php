@@ -35,6 +35,11 @@ final class SqliteConnection implements Connection
         $this->database = $database;
     }
 
+    public function isInMemoryDatabase(): bool
+    {
+        return $this->database === ':memory:';
+    }
+
     public function database(): string
     {
         return $this->database;

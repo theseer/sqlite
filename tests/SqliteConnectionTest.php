@@ -12,15 +12,11 @@
 namespace spriebsch\sqlite;
 
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use const SQLITE3_ASSOC;
 
-/**
- * @covers \spriebsch\sqlite\SqliteConnection
- *
- * @group  spriebsch
- * @group  sqlite
- */
+#[CoversClass(SqliteConnection::class)]
 class SqliteConnectionTest extends TestCase
 {
     private SqliteConnection $connection;
