@@ -49,7 +49,7 @@ abstract class SqliteSchema
     private function databaseDoesNotExist(Connection $connection): bool
     {
         if ($connection->isInMemoryDatabase()) {
-            return true;
+            return false;
         }
 
         return $this->databaseExists($connection->database());
