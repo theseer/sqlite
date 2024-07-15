@@ -52,7 +52,7 @@ abstract class SqliteSchema
             return false;
         }
 
-        return $this->databaseExists($connection->database());
+        return !$this->databaseExists($connection->database());
     }
 
     private function databaseExists(string $database): bool
