@@ -60,10 +60,13 @@ final class SqliteConnection implements Connection
         return $this->connection()->query($query);
     }
 
-    private function connection(): Sqlite3
+    public function connection(): Sqlite3
     {
         if ($this->connection === null) {
             $this->connection = new SQLite3($this->database);
+            $this->connection->exec('PRAGMA journal_mode=WAL');
+            $this->connection->exec('PRAGMA busy_timeout=10000');
+
             $this->connection->enableExceptions(true);
         }
 
